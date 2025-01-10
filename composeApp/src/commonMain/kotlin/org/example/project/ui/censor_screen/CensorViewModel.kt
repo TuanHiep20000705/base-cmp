@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.example.project.constants.ApiStatus
 import org.example.project.data.repository.NetworkRepository
+import org.example.project.event.UpdateEvent
+import org.example.project.utils.EventBus
 
 class CensorViewModel(
     private val networkRepository: NetworkRepository
@@ -21,6 +23,15 @@ class CensorViewModel(
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
+
+    init {
+        EventBus.receive<UpdateEvent>(
+            CoroutineScope(Dispatchers.Default),
+            Dispatchers.Main
+        ) {
+            println("update!!!")
+        }
+    }
 
     fun getCensor(uncensored: String) {
         CoroutineScope(Dispatchers.IO).launch {

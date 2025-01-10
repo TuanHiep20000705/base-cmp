@@ -18,13 +18,15 @@ fun initKoin(config: KoinAppDeclaration? = null) {
     }
 }
 
+fun getHttpClient() = HttpClient {
+    install(ContentNegotiation) {
+        json(json = Json { ignoreUnknownKeys = true }, contentType = ContentType.Any)
+    }
+}
+
 val provideHttpClientModule = module {
     single {
-        HttpClient {
-            install(ContentNegotiation) {
-                json(json = Json { ignoreUnknownKeys = true }, contentType = ContentType.Any)
-            }
-        }
+        getHttpClient()
     }
 }
 val provideRepositoryModule = module {
